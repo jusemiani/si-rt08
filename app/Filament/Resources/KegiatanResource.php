@@ -17,8 +17,24 @@ use Filament\Forms\Components\{Section, Grid, TextInput, Textarea, DatePicker, S
 class KegiatanResource extends Resource
 {
     protected static ?string $model = Kegiatan::class;
+    protected static ?string $label = 'Kegiatan';
+    protected static ?string $navigationGroup = 'Kegiatan & Keamanan';
+    protected static ?string $navigationIcon = 'heroicon-o-bolt'; // ⚡ Kegiatan/Aktivitas
+    protected static ?string $activeNavigationIcon = 'heroicon-s-bolt';
+    protected static ?int $navigationSort = 5;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    public static function getNavigationBadge(): ?string
+    {
+        return static::getModel()::count();
+    }
+
+    public static function getNavigationBadgeColor(): ?string
+    {
+        return static::getModel()::count() < 2 ? 'danger' : 'info';
+    }
+
+    protected static ?string $navigationBadgeTooltip = 'Total Kegiatan';
+    protected static ?string $slug = 'kegiatan';
 
     public static function form(Form $form): Form
     {
@@ -91,6 +107,7 @@ class KegiatanResource extends Resource
                             ->columns(1)
                             ->minItems(1)
                             ->addActionLabel('Tambah Gambar')
+                            ->grid(3)
                             ->collapsible()
                             ->defaultItems(1),
                     ])

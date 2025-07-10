@@ -18,8 +18,24 @@ use Illuminate\Support\Facades\Auth;
 class IuranResource extends Resource
 {
     protected static ?string $model = Iuran::class;
+    protected static ?string $label = 'Iuran';
+    protected static ?string $navigationGroup = 'Keuangan, Peminjaman & Fasilitas';
+    protected static ?string $navigationIcon = 'heroicon-o-banknotes'; // 💵 Uang
+    protected static ?string $activeNavigationIcon = 'heroicon-s-banknotes';
+    protected static ?int $navigationSort = 3;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    public static function getNavigationBadge(): ?string
+    {
+        return static::getModel()::count();
+    }
+
+    public static function getNavigationBadgeColor(): ?string
+    {
+        return static::getModel()::count() < 10 ? 'warning' : 'info';
+    }
+
+    protected static ?string $navigationBadgeTooltip = 'Total Iuran';
+    protected static ?string $slug = 'iuran';
 
 
     public static function form(Form $form): Form

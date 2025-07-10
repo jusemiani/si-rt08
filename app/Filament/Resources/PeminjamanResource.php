@@ -18,8 +18,24 @@ use Illuminate\Support\Facades\Auth;
 class PeminjamanResource extends Resource
 {
     protected static ?string $model = Peminjaman::class;
+    protected static ?string $label = 'Peminjaman';
+    protected static ?string $navigationGroup = 'Keuangan, Peminjaman & Fasilitas';
+    protected static ?string $navigationIcon = 'heroicon-o-arrow-path'; // 🔄 Perputaran barang/peminjaman
+    protected static ?string $activeNavigationIcon = 'heroicon-s-arrow-path';
+    protected static ?int $navigationSort = 6;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    public static function getNavigationBadge(): ?string
+    {
+        return static::getModel()::count();
+    }
+
+    public static function getNavigationBadgeColor(): ?string
+    {
+        return static::getModel()::count() < 1 ? 'danger' : 'success';
+    }
+
+    protected static ?string $navigationBadgeTooltip = 'Total Peminjaman';
+    protected static ?string $slug = 'peminjaman';
 
     public static function form(Form $form): Form
     {

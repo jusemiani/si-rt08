@@ -19,7 +19,24 @@ class PermohonanResource extends Resource
 {
     protected static ?string $model = Permohonan::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $label = 'Permohonan';
+    protected static ?string $navigationGroup = 'Keuangan, Peminjaman & Fasilitas';
+    protected static ?string $navigationIcon = 'heroicon-o-inbox-arrow-down'; // 📥 Permintaan/Masuk
+    protected static ?string $activeNavigationIcon = 'heroicon-s-inbox-arrow-down';
+    protected static ?int $navigationSort = 7;
+
+    public static function getNavigationBadge(): ?string
+    {
+        return static::getModel()::count();
+    }
+
+    public static function getNavigationBadgeColor(): ?string
+    {
+        return static::getModel()::count() < 5 ? 'warning' : 'info';
+    }
+
+    protected static ?string $navigationBadgeTooltip = 'Total Permohonan';
+    protected static ?string $slug = 'permohonan';
 
 
     public static function form(Form $form): Form

@@ -17,8 +17,24 @@ use Filament\Forms\Components\{Grid, Section, TextInput, Select, FileUpload, dat
 class JadwalRondaResource extends Resource
 {
     protected static ?string $model = JadwalRonda::class;
+    protected static ?string $label = 'Jadwal Ronda';
+    protected static ?string $navigationGroup = 'Kegiatan & Keamanan';
+    protected static ?string $navigationIcon = 'heroicon-o-calendar-days'; // 📅 Jadwal
+    protected static ?string $activeNavigationIcon = 'heroicon-s-calendar-days';
+    protected static ?int $navigationSort = 4;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    public static function getNavigationBadge(): ?string
+    {
+        return static::getModel()::count();
+    }
+
+    public static function getNavigationBadgeColor(): ?string
+    {
+        return static::getModel()::count() < 3 ? 'danger' : 'success';
+    }
+
+    protected static ?string $navigationBadgeTooltip = 'Total Jadwal Ronda';
+    protected static ?string $slug = 'jadwal-ronda';
 
     public static function form(Form $form): Form
     {

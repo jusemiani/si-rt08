@@ -17,8 +17,24 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 class BarangResource extends Resource
 {
     protected static ?string $model = Barang::class;
+    protected static ?string $label = 'Barang';
+    protected static ?string $navigationGroup = 'Keuangan, Peminjaman & Fasilitas';
+    protected static ?string $navigationIcon = 'heroicon-o-cube'; // 📦 Barang
+    protected static ?string $activeNavigationIcon = 'heroicon-s-cube';
+    protected static ?int $navigationSort = 2;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    public static function getNavigationBadge(): ?string
+    {
+        return static::getModel()::count();
+    }
+
+    public static function getNavigationBadgeColor(): ?string
+    {
+        return static::getModel()::count() < 5 ? 'danger' : 'success';
+    }
+
+    protected static ?string $navigationBadgeTooltip = 'Total Barang';
+    protected static ?string $slug = 'barang';
 
     public static function form(Form $form): Form
     {
