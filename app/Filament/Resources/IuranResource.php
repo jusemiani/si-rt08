@@ -13,6 +13,7 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Forms\Components\{Grid, Section, TextInput, Select, FileUpload};
+use Filament\Tables\Columns\Summarizers\Sum;
 use Illuminate\Support\Facades\Auth;
 
 class IuranResource extends Resource
@@ -71,6 +72,13 @@ class IuranResource extends Resource
                                 ->helperText('Pilih jenis iuran yang dibayarkan.'),
                         ]),
 
+                        TextInput::make('jumlah')
+                            ->label('Jumlah (Rp)')
+                            ->placeholder('Masukkan Jumlah')
+                            ->prefix('Rp')
+                            ->numeric()
+                            ->required(),
+
                         FileUpload::make('bukti')
                             ->label('Bukti Pembayaran (Untuk Transfer)')
                             ->directory('bukti-iuran')
@@ -104,6 +112,12 @@ class IuranResource extends Resource
                 Tables\Columns\TextColumn::make('jenis')
                     ->searchable(),
                 Tables\Columns\ImageColumn::make('bukti')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('jumlah')
+                    ->money('IDR')
+                    ->summarize([
+                        Sum::make(),
+                    ])
                     ->searchable(),
                 Tables\Columns\TextColumn::make('status')
                     ->searchable(),

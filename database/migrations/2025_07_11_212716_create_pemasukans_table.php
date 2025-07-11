@@ -11,13 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('iurans', function (Blueprint $table) {
+        Schema::create('pemasukans', function (Blueprint $table) {
             $table->id();
-            $table->string('tipe_pembayaran', 15);
-            $table->string('jenis', 20);
-            $table->string('jumlah', 20);
-            $table->string('bukti', 100)->nullable();
-            $table->string('status', 45)->default('Menunggu');
+            $table->date('tanggal');
+            $table->string('sumber', 100); // contoh: Iuran, Donasi
+            $table->unsignedBigInteger('jumlah');
+            $table->text('keterangan')->nullable();
+            $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
             $table->timestamps();
         });
     }
@@ -27,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('iurans');
+        Schema::dropIfExists('pemasukans');
     }
 };

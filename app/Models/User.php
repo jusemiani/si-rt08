@@ -71,4 +71,16 @@ class User extends Authenticatable implements HasAvatar
     {
         return $this->hasMany(\App\Models\Peminjaman::class);
     }
+
+    public function pemasukans(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(\App\Models\Pemasukan::class);
+    }
+
+
+    public function pengeluarans(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(\App\Models\Pengeluaran::class);
+    }
+
 }

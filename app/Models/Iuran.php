@@ -13,8 +13,20 @@ class Iuran extends Model
         'tipe_pembayaran',
         'jenis',
         'bukti',
+        'jumlah',
         'status',
-        'file_pendukung',
-        'file_surat',
     ];
+
+    protected static function booted()
+    {
+        static::created(function ($iuran) {
+            Pemasukan::create([
+                'tanggal' => now(),
+                'sumber' => $iuran->jenis,
+                'jumlah' =>  $iuran->jumlah ?? 0, // Pastikan kolom jumlah tersedia
+                'keterangan' => 'Pemasukan otomatis dari iuran: ' . $iuran->jenis,
+                'user_id' => $iuran->user_id ?? auth()->id(),
+            ]);
+        });
+    }
 }

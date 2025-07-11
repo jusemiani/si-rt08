@@ -22,4 +22,10 @@ class Kegiatan extends Model
         return $this->hasMany(\App\Models\GaleriKegiatan::class);
     }
 
+
+    public function pengeluarans(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(\App\Models\Pengeluaran::class);
+    }
+
 }
