@@ -120,6 +120,47 @@ class KegiatanResource extends Resource
     {
         return $table
             ->columns([
+                Tables\Columns\TextColumn::make('nama')
+                    ->label('Nama Kegiatan')
+                    ->searchable()
+                    ->sortable()
+                    ->icon('heroicon-o-clipboard-document')
+                    ->color('primary'),
+
+                Tables\Columns\TextColumn::make('tanggal')
+                    ->label('Tanggal')
+                    ->date()
+                    ->sortable(),
+
+                Tables\Columns\TextColumn::make('lokasi')
+                    ->label('Lokasi')
+                    ->searchable()
+                    ->wrap()
+                    ->icon('heroicon-o-map-pin')
+                    ->color('info'),
+
+                Tables\Columns\TextColumn::make('jenis')
+                    ->label('Jenis Kegiatan')
+                    ->badge()
+                    ->formatStateUsing(function ($state) {
+                        return match ($state) {
+                            1 => 'Umum',
+                            2 => 'Ronda',
+                            3 => 'Rapat',
+                            4 => 'Lainnya',
+                            default => 'Tidak Diketahui',
+                        };
+                    })
+                    ->color(function ($state) {
+                        return match ($state) {
+                            1 => 'primary',
+                            2 => 'success',
+                            3 => 'warning',
+                            4 => 'gray',
+                            default => 'danger',
+                        };
+                    }),
+
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()

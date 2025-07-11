@@ -63,8 +63,8 @@ class JadwalRondaResource extends Resource
                         Select::make('shift')
                             ->label('Shift Ronda')
                             ->options([
-                                1 => 'Siang',
-                                2 => 'Malam',
+                                1 => 'Malam 1 (22:00 - 00:00)',
+                                2 => 'Malam 2 (00:00 - 04:00)',
                             ])
                             ->required()
                             ->helperText('Pilih waktu ronda warga.')
@@ -79,7 +79,7 @@ class JadwalRondaResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('user_id')
+                Tables\Columns\TextColumn::make('users.name')
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('tanggal')

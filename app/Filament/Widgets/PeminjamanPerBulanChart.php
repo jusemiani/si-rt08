@@ -43,6 +43,6 @@ class PeminjamanPerBulanChart extends ChartWidget
 
     public static function canView(): bool
     {
-        return Auth::user()->hasRole(['Administrator', 'Bendahara']);
+        return Auth::user()->hasRole(['Administrator', 'Bendahara', 'Ketua RT']);
     }
 }

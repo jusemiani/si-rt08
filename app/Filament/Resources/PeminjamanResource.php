@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\Auth;
 class PeminjamanResource extends Resource
 {
     protected static ?string $model = Peminjaman::class;
-    protected static ?string $label = 'Peminjaman';
+    protected static ?string $label = 'Peminjaman Barang';
     protected static ?string $navigationGroup = 'Keuangan, Peminjaman & Fasilitas';
     protected static ?string $navigationIcon = 'heroicon-o-arrow-path'; // 🔄 Perputaran barang/peminjaman
     protected static ?string $activeNavigationIcon = 'heroicon-s-arrow-path';
@@ -35,7 +35,7 @@ class PeminjamanResource extends Resource
     }
 
     protected static ?string $navigationBadgeTooltip = 'Total Peminjaman';
-    protected static ?string $slug = 'peminjaman';
+    protected static ?string $slug = 'peminjaman-barang';
 
     public static function form(Form $form): Form
     {
@@ -111,7 +111,8 @@ class PeminjamanResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('user_id')
+                Tables\Columns\TextColumn::make('users.name')
+                    ->label('Nama')
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('tanggal_pinjam')
