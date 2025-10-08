@@ -15,6 +15,7 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Forms\Components\{Grid, Section, TextInput, Select, FileUpload};
 use Filament\Tables\Columns\Summarizers\Sum;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\HtmlString;
 
 class IuranResource extends Resource
 {
@@ -48,6 +49,15 @@ class IuranResource extends Resource
                     ->description('Silakan isi data pembayaran iuran dengan lengkap.')
                     ->schema([
                         Grid::make(2)->schema([
+                            Select::make('user_id')
+                                ->label('User')
+                                ->placeholder('Pilih Pengguna')
+                                ->relationship('users', 'name')
+                                ->default(Auth::user()->id)
+                                ->disabled(!Auth::user()->hasRole('Bendahara'))
+                                ->dehydrated()
+                                ->preload()
+                                ->searchable(),
                             Select::make('tipe_pembayaran')
                                 ->label('Tipe Pembayaran')
                                 ->options([
@@ -70,19 +80,22 @@ class IuranResource extends Resource
                                 ->required()
                                 ->native(false)
                                 ->helperText('Pilih jenis iuran yang dibayarkan.'),
+
+                            TextInput::make('jumlah')
+                                ->label('Jumlah (Rp)')
+                                ->placeholder('Masukkan Jumlah')
+                                ->prefix('Rp')
+                                ->numeric()
+                                ->required(),
                         ]),
-
-                        TextInput::make('jumlah')
-                            ->label('Jumlah (Rp)')
-                            ->placeholder('Masukkan Jumlah')
-                            ->prefix('Rp')
-                            ->numeric()
-                            ->required(),
-
                         FileUpload::make('bukti')
                             ->label('Bukti Pembayaran (Untuk Transfer)')
                             ->directory('bukti-iuran')
-                            ->helperText('Unggah bukti pembayaran. Maks 2MB.')
+                            ->helperText(new HtmlString(
+                                'Unggah bukti pembayaran. Maks 2MB.<br><br>
+                                Nomor Rekening: <br>
+                                <strong>BRI A.N Aisyah :</strong> <strong>1234-5678-9012-3456<strong>'
+                            ))
                             ->visible(fn(callable $get) => $get('tipe_pembayaran') === 'Transfer'),
 
                         Select::make('status')
@@ -95,7 +108,7 @@ class IuranResource extends Resource
                             ->native(false)
                             ->hidden(!Auth::user()->hasRole('Bendahara'))
                             ->dehydrated()
-                            ->required()
+                            ->required(),
                     ])
                     ->columns(1)
                     ->collapsible(),
@@ -106,7 +119,15 @@ class IuranResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+            ->modifyQueryUsing(function ($query) {
+                if (Auth::user()->hasRole('Warga')) {
+                    $query->where('user_id', Auth::id());
+                }
+            })
             ->columns([
+                Tables\Columns\TextColumn::make('users.name')
+                    ->label('Warga')
+                    ->searchable(),
                 Tables\Columns\TextColumn::make('tipe_pembayaran')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('jenis')

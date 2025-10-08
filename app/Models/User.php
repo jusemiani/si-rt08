@@ -83,4 +83,10 @@ class User extends Authenticatable implements HasAvatar
         return $this->hasMany(\App\Models\Pengeluaran::class);
     }
 
+
+    public function iurans(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(\App\Models\Iuran::class);
+    }
+
 }

@@ -114,12 +114,12 @@ class PengeluaranResource extends Resource
                     ->money('IDR', true)
                     ->sortable(),
 
-                TextColumn::make('kegiatan.nama') // relasi kegiatan()->nama
+                TextColumn::make('kegiatans.nama') // relasi kegiatan()->nama
                     ->label('Kegiatan')
                     ->sortable()
                     ->toggleable(),
 
-                TextColumn::make('user.nama') // relasi user()->nama
+                TextColumn::make('users.name') // relasi user()->nama
                     ->label('Dicatat Oleh')
                     ->sortable()
                     ->searchable(),

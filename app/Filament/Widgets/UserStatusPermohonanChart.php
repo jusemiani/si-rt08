@@ -38,6 +38,6 @@ class UserStatusPermohonanChart extends ChartWidget
 
     public static function canView(): bool
     {
-        return Auth::user()->hasRole('User');
+        return Auth::user()->hasRole('Warga');
     }
 }

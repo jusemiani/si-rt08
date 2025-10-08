@@ -100,6 +100,7 @@ class KegiatanResource extends Resource
                                     ->label('Gambar')
                                     ->directory('galeri-kegiatan')
                                     ->image()
+                                    ->downloadable()
                                     ->maxSize(2048)
                                     ->required()
                                     ->helperText('Unggah file gambar. Maksimal 2MB.')
@@ -144,19 +145,19 @@ class KegiatanResource extends Resource
                     ->badge()
                     ->formatStateUsing(function ($state) {
                         return match ($state) {
-                            1 => 'Umum',
-                            2 => 'Ronda',
-                            3 => 'Rapat',
-                            4 => 'Lainnya',
+                            '1' => 'Umum',
+                            '2' => 'Ronda',
+                            '3' => 'Rapat',
+                            '4' => 'Lainnya',
                             default => 'Tidak Diketahui',
                         };
                     })
                     ->color(function ($state) {
                         return match ($state) {
-                            1 => 'primary',
-                            2 => 'success',
-                            3 => 'warning',
-                            4 => 'gray',
+                            '1' => 'primary',
+                            '2' => 'success',
+                            '3' => 'warning',
+                            '4' => 'gray',
                             default => 'danger',
                         };
                     }),

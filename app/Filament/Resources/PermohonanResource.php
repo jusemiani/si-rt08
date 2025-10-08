@@ -49,16 +49,21 @@ class PermohonanResource extends Resource
                     ->schema([
                         Grid::make(2)->schema([
                             Select::make('user_id')
-                                ->label('Nama Warga')
+                                ->label('Nama Pengaju Permohonan')
                                 ->relationship('users', 'name') // ganti sesuai field nama di tabel users
                                 ->searchable()
                                 ->preload()
                                 ->required()
+                                ->disabled(Auth::user()->hasRole('Warga'))
+                                ->dehydrated()
                                 ->default(Auth::user()->id)
                                 ->helperText('Pilih warga yang mengajukan surat.'),
 
                             DatePicker::make('tanggal')
                                 ->label('Tanggal Permohonan')
+                                ->placeholder('Pilih Tanggal Permohonan')
+                                ->default(now())
+                                ->native(false)
                                 ->required(),
                         ]),
 
@@ -71,6 +76,7 @@ class PermohonanResource extends Resource
                                 'Lainnya' => 'Lainnya',
                             ])
                             ->required()
+                            ->native(false)
                             ->reactive()
                             ->helperText('Pilih jenis surat yang dibutuhkan.'),
 
@@ -99,6 +105,9 @@ class PermohonanResource extends Resource
                                 'Selesai' => 'Selesai',
                             ])
                             ->default('Menunggu')
+                            ->visible(Auth::user()->hasRole('Ketua RT'))
+                            ->reactive()
+                            ->native(false)
                             ->required(),
 
                         FileUpload::make('file_pendukung')
@@ -122,23 +131,35 @@ class PermohonanResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+            ->modifyQueryUsing(function (Builder $query) {
+                if (! Auth::user()->hasRole('Ketua RT')) {
+                    $query->where('user_id', Auth::id());
+                }
+
+                return $query;
+            })
             ->columns([
                 Tables\Columns\TextColumn::make('users.name')
-                    ->label('Nama')
+                    ->label('Nama Pengaju')
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('tanggal')
                     ->date()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('jenis')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('jenis_lainnya')
+                    ->label('Jenis Permohonan')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('status')
+                    ->badge()
+                    ->color(fn(string $state): string => match ($state) {
+                        'Menunggu' => 'warning',
+                        'Diproses' => 'info',
+                        'Selesai'  => 'success',
+                        default    => 'gray',
+                    })
                     ->searchable(),
-                Tables\Columns\TextColumn::make('file_pendukung')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('file_surat')
+                Tables\Columns\ImageColumn::make('file_pendukung')
+                    ->circular()
                     ->searchable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()

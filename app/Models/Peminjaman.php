@@ -13,6 +13,7 @@ class Peminjaman extends Model
         'user_id',
         'tanggal_pinjam',
         'tanggal_kembali',
+        'status'
     ];
 
     public function users(): \Illuminate\Database\Eloquent\Relations\BelongsTo

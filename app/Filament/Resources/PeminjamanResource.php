@@ -60,9 +60,19 @@ class PeminjamanResource extends Resource
                                 ->searchable()
                                 ->preload()
                                 ->required()
-                                ->default(Auth::user()->id)
-                                ->columnSpanFull()
-                                ->helperText('Pilih nama warga yang meminjam barang.'),
+                                ->default(Auth::user()->id),
+
+                            Select::make('status')
+                                ->label('Status')
+                                ->options([
+                                    'Menunggu' => 'Menunggu',
+                                    'Diterima' => 'Diterima',
+                                    'Ditolak' => 'Ditolak',
+                                ]) // sesuaikan dengan kolom di tabel users
+                                ->searchable()
+                                ->preload()
+                                ->required()
+                                ->default('Menunggu')
                         ]),
                     ])
                     ->columns(1)
@@ -121,6 +131,8 @@ class PeminjamanResource extends Resource
                 Tables\Columns\TextColumn::make('tanggal_kembali')
                     ->date()
                     ->sortable(),
+                Tables\Columns\TextColumn::make('status')
+                    ->badge(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()

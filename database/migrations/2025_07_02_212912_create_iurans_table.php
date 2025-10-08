@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('iurans', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
             $table->string('tipe_pembayaran', 15);
             $table->string('jenis', 20);
             $table->string('jumlah', 20);
